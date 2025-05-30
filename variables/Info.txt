@@ -1,4 +1,5 @@
 About variables: Variables provide a way to store and reuse non-sensitive configuration information. You can store any configuration data such as compiler flags, usernames, or server names as variables. Variables are interpolated on the runner machine that runs your workflow. Commands that run in actions or workflow steps can create, read, and modify variables.
+
 GITHUB Actions have default variables. We can also declare our custom variables.
 
 #Default Varibales:
@@ -6,8 +7,35 @@ The default environment variables that GitHub sets are available to every step i
 
 #You can't overwrite the value of the default environment variables named GITHUB_* and RUNNER_*
 
-#Find all the varibales in below link.
+####Find all the varibales in below link.
 https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
 
+####The following rules apply to configuration variable names:
+Can only contain alphanumeric characters ([a-z], [A-Z], [0-9]) or underscores (_). Spaces are not allowed.
+Must not start with the GITHUB_ prefix.
+Must not start with a number.
+Are case insensitive.
+Must be unique to the repository, organization, or enterprise where they are created.
+
+#####Precedence Order (Highest to Lowest)
+Step env    ------>for short-lived or sensitive variables.
+Job env
+Workflow env -------->for global values (like versions).
+Repository-level environment secrets/settings ----->Use secrets for sensitive values like API keys or tokens.
+Default GitHub environment variables (e.g., GITHUB_REPOSITORY)
+
+#####We can access the Varibales in different contexts.
+$MY_VARIABLE ---->Use this inside 'run:' shell commands (bash, sh, PowerShell).
+$env:MY_VARIABLE    ---->If the runner is windows
+${{ env.MY_VARIABLE }}   ----->Use this in fields like env:, if:, with:, name:------>object type will be string.
+${{ github.repository }}
+
+
+
+${{ vars.MY_VARIABLE }}
+The vars context is used to access custom configuration variables defined at:
+Repository level
+Environment level (if you use GitHub environments)
+These variables are defined under Repository Settings → Variables → Actions.
 
 

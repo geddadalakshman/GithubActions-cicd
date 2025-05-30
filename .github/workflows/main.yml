@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  APP_NAME: workflow-variable  # Example of a custom environment variable
+
 jobs:
   print-env-variables:
     runs-on: ubuntu-latest
@@ -38,6 +41,13 @@ jobs:
           echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           echo "Access GitHub Token Securely: ${{ secrets.GITHUB_TOKEN }}"
 
+          echo "Variable from: ${{ env.APP_NAME }}"
+
+          echo "Variable from: $APP_NAME"
+          env:
+            APP_NAME: run-varibale
+
+      
 
 
 #Output:
