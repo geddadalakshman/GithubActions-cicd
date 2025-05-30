@@ -35,4 +35,31 @@ jobs:
           echo "RUNNER_NAME: $RUNNER_NAME"
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           echo "RUNNER_ENVIRONMENT: $RUNNER_ENVIRONMENT"
+          echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           echo "Access GitHub Token Securely: ${{ secrets.GITHUB_TOKEN }}"
+
+
+
+#Output:
+# CI: true
+# GITHUB_ACTION: __run
+# GITHUB_ENV: /home/runner/work/_temp/_runner_file_commands/set_env_e9b2704e-6f63-4f76-bb57-12dc96bf909a
+# GITHUB_REF_PROTECTED: false
+# GITHUB_REPOSITORY: geddadalakshman/GithubActions-cicd
+# GITHUB_REF: refs/heads/main
+# GITHUB_SHA: 306c24a0ac3f340862cfafae8e5a2ac49e4f7efa
+# GITHUB_WORKFLOW: GitHub Env Variables Test
+# GITHUB_RUN_NUMBER: 5
+# GITHUB_ACTOR: geddadalakshman
+# GITHUB_EVENT_NAME: push
+# GITHUB_EVENT_PATH: /home/runner/work/_temp/_github_workflow/event.json
+# GITHUB_HEAD_REF: 
+# GITHUB_BASE_REF: 
+# GITHUB_JOB: print-env-variables
+# GITHUB_OUTPUT: /home/runner/work/_temp/_runner_file_commands/set_output_e9b2704e-6f63-4f76-bb57-12dc96bf909a
+# RUNNER_OS: Linux
+# RUNNER_ARCH: X64
+# RUNNER_NAME: GitHub Actions 1000000002
+# GITHUB_WORKSPACE: /home/runner/work/GithubActions-cicd/GithubActions-cicd
+# RUNNER_ENVIRONMENT: github-hosted
+# Access GitHub Token Securely: ***
