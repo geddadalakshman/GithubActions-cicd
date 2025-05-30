@@ -41,13 +41,13 @@ jobs:
           echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           echo "Access GitHub Token Securely: ${{ secrets.GITHUB_TOKEN }}"
           echo "Variable from: ${{ env.APP_NAME }}"
-          echo "Variable from: $APP_NAME"
+          echo "Variable from: $NAME"
 
       # - name: Print Environment Variable from Job
       # #   run: |
       #     echo "Variable: $APP_NAME"
         env:
-          APP_NAME: run-varibale
+          NAME: run-varibale
 
       
 
