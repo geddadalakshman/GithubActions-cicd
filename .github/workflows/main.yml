@@ -1,18 +1,32 @@
-name: Greeting on variable day
+name: GitHub Env Variables Test
 
 on:
-  workflow_dispatch
-
-env:
-  DAY_OF_WEEK: Tuesday
+  push:
+    branches:
+      - main
 
 jobs:
-  greeting_job:
+  print-env-variables:
     runs-on: ubuntu-latest
-    env:
-      Greeting: Hello
     steps:
-      - name: "Say Hello Mona it's Monday"
-        run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
-        env:
-          First_Name: Lakshman
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print Common GitHub Environment Variables
+        run: |
+          echo "CI: $CI"
+          echo "GITHUB_ACTION: $GITHUB_ACTION"
+          echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
+          echo "GITHUB_REF: $GITHUB_REF"
+          echo "GITHUB_SHA: $GITHUB_SHA"
+          echo "GITHUB_WORKFLOW: $GITHUB_WORKFLOW"
+          echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
+          echo "GITHUB_ACTOR: $GITHUB_ACTOR"
+          echo "GITHUB_EVENT_NAME: $GITHUB_EVENT_NAME"
+          echo "GITHUB_EVENT_PATH: $GITHUB_EVENT_PATH"
+          echo "GITHUB_HEAD_REF: $GITHUB_HEAD_REF"
+          echo "GITHUB_BASE_REF: $GITHUB_BASE_REF"
+          echo "RUNNER_OS: $RUNNER_OS"
+          echo "RUNNER_ARCH: $RUNNER_ARCH"
+          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+          echo "Access GitHub Token Securely: ${{ secrets.GITHUB_TOKEN }}"

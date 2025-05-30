@@ -1,0 +1,13 @@
+About variables: Variables provide a way to store and reuse non-sensitive configuration information. You can store any configuration data such as compiler flags, usernames, or server names as variables. Variables are interpolated on the runner machine that runs your workflow. Commands that run in actions or workflow steps can create, read, and modify variables.
+GITHUB Actions have default variables. We can also declare our custom variables.
+
+#Default Varibales:
+The default environment variables that GitHub sets are available to every step in a workflow. Because default environment variables are set by GitHub and not defined in a workflow, they are not accessible through the env context. For example, the value of the GITHUB_REF variable can be read during workflow processing using the ${{ github.ref }} context property. 
+
+#You can't overwrite the value of the default environment variables named GITHUB_* and RUNNER_*
+
+#Find all the varibales in below link.
+https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
+
+
+
