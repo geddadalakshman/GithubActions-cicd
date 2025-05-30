@@ -43,6 +43,8 @@ jobs:
 
           echo "Variable from: ${{ env.APP_NAME }}"
 
+      - name: Print Environment Variable from Job
+        run: |
           echo "Variable from: $APP_NAME"
           env:
             APP_NAME: run-varibale
