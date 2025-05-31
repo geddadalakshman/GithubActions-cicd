@@ -52,7 +52,9 @@ jobs:
 
       - name: Print env variables from guthub environment
         run: |
-          echo "Environment-scoped var: $MY_NAME"
+          echo "Environment-scoped var: $MY_NAME"          
+          echo "Environment-scoped secret: ${{ secrets.PASSWD}}"          
+
         env:
           MY_NAME: ${{ vars.MY_NAME }}
       
