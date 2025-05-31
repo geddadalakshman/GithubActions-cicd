@@ -11,7 +11,7 @@ jobs:
         id: build_step
         run: |
             echo "build_id=$RANDOM" >> $GITHUB_OUTPUT
-            $GITHUB_OUTPUT
+            echo "$GITHUB_OUTPUT"
 
   deploy:
     needs: build
