@@ -11,6 +11,7 @@ env:
 jobs:
   print-env-variables:
     runs-on: ubuntu-latest
+    environment: NAME
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -42,7 +43,7 @@ jobs:
           echo "Access GitHub Token Securely: ${{ secrets.GITHUB_TOKEN }}"
           echo "Variable from: ${{ env.APP_NAME }}"
           echo "Variable from: $NAME"
-          echo "My name is: $MY_NAME"
+          echo "Environment-scoped var: $MY_NAME"
 
       # - name: Print Environment Variable from Job
       # #   run: |
