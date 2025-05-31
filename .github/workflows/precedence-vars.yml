@@ -1,0 +1,20 @@
+name: Printing environment variables based on precedence.
+
+on: 
+    workflow_dispatch
+
+env:
+    NAME: "Lakshman"
+jobs:
+    print-environment-variables:
+        runs-on: ubuntu-latest
+        env: 
+            greet: "Welcome to GitHub Actions"
+        steps:
+            - name: Print env variables
+              env:
+                wish: "Good morning"
+              run: |
+                echo "Hi $NAME $wish, $greet"
+
+            
