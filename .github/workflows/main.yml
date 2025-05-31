@@ -11,7 +11,7 @@ env:
 jobs:
   print-env-variables:
     runs-on: ubuntu-latest
-    environment: NAME
+    #environment: NAME
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
