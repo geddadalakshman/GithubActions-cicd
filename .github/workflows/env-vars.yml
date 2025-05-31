@@ -15,5 +15,4 @@ jobs:
               run: |
                 echo "Hi $NAME, $greet"
 
-
             

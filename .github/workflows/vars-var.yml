@@ -4,7 +4,7 @@ on:
     workflow_dispatch
 
 jobs:
-    print-github-env-variables:
+    github-env-variables:
         runs-on: ubuntu-latest
         environment: NAME
         steps:
