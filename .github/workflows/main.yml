@@ -42,6 +42,7 @@ jobs:
           echo "Access GitHub Token Securely: ${{ secrets.GITHUB_TOKEN }}"
           echo "Variable from: ${{ env.APP_NAME }}"
           echo "Variable from: $NAME"
+          echo "My name is: ${{ vars.MY_NAME }}"
 
       # - name: Print Environment Variable from Job
       # #   run: |
