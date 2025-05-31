@@ -1,9 +1,7 @@
 name: GitHub Env Variables Test
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 env:
   APP_NAME: workflow-variable  # Example of a custom environment variable
@@ -11,7 +9,7 @@ env:
 jobs:
   print-env-variables:
     runs-on: ubuntu-latest
-    #environment: NAME
+    environment: NAME
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -43,10 +41,6 @@ jobs:
           echo "Access GitHub Token Securely: ${{ secrets.GITHUB_TOKEN }}"
           echo "Variable from: ${{ env.APP_NAME }}"
           echo "Variable from: $NAME"
-
-      # - name: Print Environment Variable from Job
-      # #   run: |
-      #     echo "Variable: $APP_NAME"
         env:
           NAME: run-varibale
 
@@ -56,7 +50,6 @@ jobs:
           echo "Environment-scoped secret: ${{ secrets.PASSWD}}"          
         env:
           MY_NAME: ${{ vars.MY_NAME }}
-
 
       - name: Print env variables and secrets from guthub repository
         run: |

@@ -1,0 +1,19 @@
+name: Printing environment variables
+
+on: 
+    workflow_dispatch
+
+env:
+    NAME: "Lakshman"
+    greet: "Welcome to GitHub Actions"
+
+jobs:
+    print-environment-variables:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Print env variables
+              run: |
+                echo "Hi $NAME, $greet"
+
+
+            
