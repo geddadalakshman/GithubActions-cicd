@@ -43,13 +43,17 @@ jobs:
           echo "Access GitHub Token Securely: ${{ secrets.GITHUB_TOKEN }}"
           echo "Variable from: ${{ env.APP_NAME }}"
           echo "Variable from: $NAME"
-          echo "Environment-scoped var: $MY_NAME"
 
       # - name: Print Environment Variable from Job
       # #   run: |
       #     echo "Variable: $APP_NAME"
         env:
           NAME: run-varibale
+
+      - name: Print env variables from guthub environment
+        run: |
+          echo "Environment-scoped var: $MY_NAME"
+        env:
           MY_NAME: ${{ vars.MY_NAME }}
       
 
