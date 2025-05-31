@@ -1,4 +1,4 @@
-name: Printing environment variables
+name: Printing github variables
 
 on: 
     workflow_dispatch
