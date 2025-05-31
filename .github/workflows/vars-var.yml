@@ -1,0 +1,15 @@
+name: Printing environment variables
+
+on: 
+    workflow_dispatch
+
+jobs:
+    print-github-env-variables:
+        runs-on: ubuntu-latest
+        environment: NAME
+        steps:
+            - name: Print variables from github environment variables.
+              run: |
+                echo "Hi , ${{ vars.MY_NAME }}"
+
+
