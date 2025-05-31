@@ -1,0 +1,17 @@
+name: Printing environment variables
+
+on: 
+    workflow_dispatch
+
+
+jobs:
+    print-environment-variables:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Print env variables
+              run: |
+                echo "reponame: ${{ github.repository }}"
+                echo "workflow: ${{ github.workflow }}"
+                echo "run_id: ${{ github.run_id }}"
+                echo "protected: ${{ github.ref_protected }}"
+            
