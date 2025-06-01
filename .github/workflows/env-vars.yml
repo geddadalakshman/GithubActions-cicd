@@ -1,7 +1,7 @@
 name: Printing environment variables
 
 on: 
-    workflow_dispatch
+    workflow_dispatch:
 
 env:
     NAME: "Lakshman"

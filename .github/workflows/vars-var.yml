@@ -1,7 +1,7 @@
 name: Printing github environment variables
 
 on: 
-    workflow_dispatch
+    workflow_dispatch:
 
 jobs:
     github-env-variables:

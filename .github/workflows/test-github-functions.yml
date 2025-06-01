@@ -1,0 +1,43 @@
+
+name: Test All GitHub Actions Functions
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-functions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Test All Functions
+        run: |
+          echo "::group::startsWith"
+          echo "StartsWith 'refs/heads/main'? ${{ startsWith('refs/heads/main', 'refs/heads') }}"
+          echo "::endgroup::"
+
+          echo "::group::endsWith"
+          echo "EndsWith '.yml'? ${{ endsWith('test.yml', '.yml') }}"
+          echo "::endgroup::"
+
+          echo "::group::contains"
+          echo "Contains 'hello' in 'hello world'? ${{ contains('hello world', 'hello') }}"
+          echo "Contains 'node' in array ['node', 'python']? ${{ contains(fromJSON('[\"node\", \"python\"]'), 'node') }}"
+          echo "::endgroup::"
+
+          echo "::group::format"
+          echo "Formatted string: ${{ format('version-{0}-{1}', '1.0.0', 'release') }}"
+          echo "::endgroup::"
+
+          echo "::group::join"
+          echo "Joined values: ${{ join(fromJSON('[\"a\", \"b\", \"c\"]'), ', ') }}"
+          echo "::endgroup::"
+
+          echo "::group::toJSON"
+          echo "To JSON: ${{ toJSON(github.event) }}"
+          echo "::endgroup::"
+
+          echo "::group::fromJSON"
+          echo "From JSON object key: ${{ fromJSON('{"key": "value"}').key }}"
+          echo "::endgroup::"

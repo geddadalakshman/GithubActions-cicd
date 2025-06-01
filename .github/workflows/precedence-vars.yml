@@ -1,7 +1,7 @@
 name: Printing environment variables based on precedence.
 
 on: 
-    workflow_dispatch
+    workflow_dispatch:
 
 env:
     NAME: "Lakshman"
