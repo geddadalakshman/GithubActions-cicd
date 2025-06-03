@@ -16,12 +16,12 @@ jobs:
             echo "$GITHUB_OUTPUT"
 
   deploy:
-    needs: build
+    #needs: build
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deploying build ${{ needs.build.outputs.build_id }}"
   debug:
-    needs: [build, deploy]
+    #needs: [build, deploy]
     runs-on: ubuntu-latest
     if: ${{ failure() }}
     steps:
