@@ -3,8 +3,8 @@ name: GitHub Env Variables Test
 on:
   workflow_dispatch:
 
-env:
-  APP_NAME: workflow-variable  # Example of a custom environment variable
+# env:
+#   APP_NAME: workflow-variable  # Example of a custom environment variable
 
 jobs:
   print-env-variables:
@@ -39,22 +39,22 @@ jobs:
           echo "RUNNER_ENVIRONMENT: $RUNNER_ENVIRONMENT"
           echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           echo "Access GitHub Token Securely: ${{ secrets.GITHUB_TOKEN }}"
-          echo "Variable from: ${{ env.APP_NAME }}"
-          echo "Variable from: $NAME"
-        env:
-          NAME: run-varibale
+            # echo "Variable from: ${{ env.APP_NAME }}"
+            # echo "Variable from: $NAME"
+        # env:
+        #   NAME: run-varibale
 
-      - name: Print env variables from guthub environment
-        run: |
-          echo "Environment-scoped var: $MY_NAME"          
-          echo "Environment-scoped secret: ${{ secrets.PASSWD}}"          
-        env:
-          MY_NAME: ${{ vars.MY_NAME }}
+      # - name: Print env variables from guthub environment
+      #   run: |
+      #     echo "Environment-scoped var: $MY_NAME"          
+      #     echo "Environment-scoped secret: ${{ secrets.PASSWD}}"          
+      #   env:
+      #     MY_NAME: ${{ vars.MY_NAME }}
 
-      - name: Print env variables and secrets from guthub repository
-        run: |
-          echo "Repository-scoped var: ${{ vars.BAT_2}}"          
-          echo "Repository-scoped secret: ${{ secrets.BAT_1}}"          
+      # - name: Print env variables and secrets from guthub repository
+      #   run: |
+      #     echo "Repository-scoped var: ${{ vars.BAT_2}}"          
+      #     echo "Repository-scoped secret: ${{ secrets.BAT_1}}"          
 
 
 
