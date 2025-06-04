@@ -22,10 +22,10 @@ jobs:
           echo "Small number (decimal): '${{ toJSON(123456) }}'"
           echo "Large number (exponential): '${{ toJSON(123456789123456789123456789) }}'"
 
-      - name: Array Conversion
-        run: |
-          echo "Array JSON: ${{ toJSON(fromJSON('[1,2,3,\"test\"]')) }}"
-          echo "Try to convert array directly (invalid in shell): ${{ fromJSON('[1,2,3]')[0] }}"
+    #   - name: Array Conversion
+    #     run: |
+    #       echo "Array JSON: ${{ toJSON(fromJSON('[1,2,3,\"test\"]')) }}"
+    #       echo "Try to convert array directly (invalid in shell): ${{ fromJSON('[1,2,3]')[0] }}"
 
       - name: Object Conversion
         run: |
