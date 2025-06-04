@@ -1,0 +1,33 @@
+
+name: Type Conversion Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  conversion-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Null Conversion
+        run: |
+          echo "Null becomes: '${{ toJSON(null) }}'"
+
+      - name: Boolean Conversion
+        run: |
+          echo "Boolean true: '${{ toJSON(true) }}'"
+          echo "Boolean false: '${{ toJSON(false) }}'"
+
+      - name: Number Conversion
+        run: |
+          echo "Small number (decimal): '${{ toJSON(123456) }}'"
+          echo "Large number (exponential): '${{ toJSON(123456789123456789123456789) }}'"
+
+      - name: Array Conversion
+        run: |
+          echo "Array JSON: ${{ toJSON(fromJSON('[1,2,3,\"test\"]')) }}"
+          echo "Try to convert array directly (invalid in shell): ${{ fromJSON('[1,2,3]')[0] }}"
+
+      - name: Object Conversion
+        run: |
+          echo "Object JSON: ${{ toJSON(fromJSON('{"key1": "sachin", "key2": 100000}')) }}"
+          echo "Access object key1: ${{ fromJSON('{"key1": "value1"}').key1 }}"

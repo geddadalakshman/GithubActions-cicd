@@ -1,0 +1,8 @@
+Functions:
+GitHub offers a set of built-in functions that you can use in expressions. Some functions cast values to a string to perform comparisons. GitHub casts data types to a string using these conversions:
+Null    --->    ''
+Boolean --->    'true' or 'false'
+Number  --->    Decimal format, exponential for large numbers
+Array   --->    Arrays are not converted to a string
+Object  --->    Objects are not converted to a string
+
