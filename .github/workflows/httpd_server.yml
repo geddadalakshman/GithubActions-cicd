@@ -18,6 +18,11 @@ jobs:
                 sudo systemctl start apache2
                 sudo systemctl enable apache2
                 echo "Apache HTTP Server installed and started."
+
+            - name: Configure Apache HTTP Server
+              run: |
+                rm -rf /var/www/html/*
+                echo "<html><body><h1>Welcome to the Apache HTTP Server!</h1></body></html>" | sudo tee /var/www/html/index.html
             
             - name: access the server
               run: |
