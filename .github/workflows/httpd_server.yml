@@ -22,6 +22,7 @@ jobs:
             - name: Configure Apache HTTP Server
               run: |
                 ls -la /var/www/html
+                chmod -R 755 /var/www/html/*
                 rm -rf sudo /var/www/html/*
                 echo "<html><body><h1>Welcome to the Apache HTTP Server!</h1></body></html>" | sudo tee /var/www/html/index.html
             
