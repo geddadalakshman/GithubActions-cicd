@@ -8,13 +8,17 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
-              
+
             - name: My first github job
-              run: echo "Welcome to github actions"
+              run: |
+                echo "Welcome to github actions"
+                ls -la
+                cat README.md
 
-            - name: List all the files
-              run: ls -la
 
-            - name: Read the file
-              run: cat README.md
+            # - name: List all the files
+            #   run: ls -la
+
+            # - name: Read the file
+            #   run: cat README.md
 
