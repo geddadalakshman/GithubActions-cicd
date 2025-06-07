@@ -1,1 +1,1 @@
-# infra-dev
+# This repo is to learn github actions.
