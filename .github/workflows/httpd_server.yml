@@ -1,0 +1,27 @@
+name: Hosting httpd server
+
+on: push
+
+    # workflow_dispatch
+
+jobs:
+    httpd-server:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Install Apache HTTP Server
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y apache2
+                sudo systemctl start apache2
+                sudo systemctl enable apache2
+                echo "Apache HTTP Server installed and started."
+            
+            - name: access the server
+              run: |
+                echo "Access the server at http://localhost:80"
+                sleep 5  # Wait for a few seconds to ensure the server is up
+                curl http://localhost:80 || echo "Failed to access the server"
+
