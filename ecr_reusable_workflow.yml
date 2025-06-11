@@ -23,9 +23,7 @@ on:
                 required: true
             AWS_SECRET_ACCESS_KEY:
                 required: true
-                
-
-            
+                            
 jobs:
     ecr-repo:
         runs-on: ubuntu-latest

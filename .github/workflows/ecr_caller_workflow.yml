@@ -6,10 +6,10 @@ on:
 jobs:
     calling-ecr-reusable-workflow:
         uses: geddadalakshman/GithubActions-cicd/.github/workflows/ecr_reusable_workflow.yml@main
-        secrets: inherit
         with:
-            # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws_region: us-east-1
             ecr_repo_name: lakshman/test-repo
             dockerfile_path: Dockerfile
+        secrets:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
