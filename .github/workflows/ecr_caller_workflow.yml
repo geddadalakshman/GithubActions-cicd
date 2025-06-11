@@ -1,0 +1,14 @@
+name: calling reusable workflow to push docker image to ECR
+
+on:
+  workflow_dispatch:
+
+jobs:
+    calling-ecr-reusable-workflow:
+        uses: ./.github/workflows/ecr_reusable_workflow.yml@main
+        with:
+            aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws_region: us-east-1
+            ecr_repo_name: lakshman/test-repo
+            dockerfile_path: Dockerfile

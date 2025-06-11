@@ -1,0 +1,56 @@
+name: docker build and push to ECR with reusable workflow
+on: 
+    workflow_call:
+        inputs:
+            aws_access_key_id:
+                required: true
+                type: string
+            aws_secret_access_key:
+                required: true
+                type: string
+            aws_region:
+                required: true
+                type: string
+            ecr_repo_name:
+                required: true
+                type: string
+            dockerfile_path:
+                required: false
+                type: string
+                default: 'Dockerfile'
+jobs:
+    ecr-repo:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout code
+              uses: actions/checkout@v4
+            
+            - name: List files in the repository
+              run: |
+                echo "Files in the repository:"
+                ls -la
+            
+            - name: configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                aws-access-key-id: ${{ inputs.aws_access_key_id }}
+                aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
+                aws-region: ${{ inputs.aws_region }}
+            
+            - name: Login to Amazon ECR
+              run: |
+                aws ecr-public get-login-password --region ${{ inputs.aws_region }} | docker login --username AWS --password-stdin public.ecr.aws/t0x7f1q9
+
+            - name: Build the docker image
+              run: |
+                docker build -t ${{ inputs.ecr_repo_name }} -f ${{ inputs.dockerfile_path }} .
+
+            - name: Tag the docker image
+              run: |
+                docker tag ${{ inputs.ecr_repo_name }}:latest public.ecr.aws/${{ inputs.aws_account_id }}/${{ inputs.ecr_repo_name }}:${{ github.run_id }}
+
+            - name: Push the docker image to ECR
+              run: |    
+                docker push public.ecr.aws/${{ inputs.aws_account_id }}/${{ inputs.ecr_repo_name }}:${{ github.run_id }}
+        
+
