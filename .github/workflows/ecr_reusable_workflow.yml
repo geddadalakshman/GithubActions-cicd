@@ -2,10 +2,10 @@ name: docker build and push to ECR with reusable workflow
 on: 
     workflow_call:
         inputs:
-            aws_access_key_id:
+            AWS_ACCESS_KEY_ID:
                 required: true
                 type: string
-            aws_secret_access_key:
+            AWS_SECRET_ACCESS_KEY:
                 required: true
                 type: string
             aws_region:
@@ -19,10 +19,9 @@ on:
                 type: string
                 default: 'Dockerfile'
         secrets:
-            aws_access_key_id:
+            AWS_ACCESS_KEY_ID:
                 required: true
-                
-            aws_secret_access_key:
+            AWS_SECRET_ACCESS_KEY:
                 required: true
                 
 
