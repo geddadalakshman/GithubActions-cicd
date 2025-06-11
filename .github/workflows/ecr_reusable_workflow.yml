@@ -18,6 +18,15 @@ on:
                 required: false
                 type: string
                 default: 'Dockerfile'
+        secrets:
+            aws_access_key_id:
+                required: true
+                
+            aws_secret_access_key:
+                required: true
+                
+
+            
 jobs:
     ecr-repo:
         runs-on: ubuntu-latest
