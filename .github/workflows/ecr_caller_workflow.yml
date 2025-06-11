@@ -5,7 +5,7 @@ on:
 
 jobs:
     calling-ecr-reusable-workflow:
-        uses: ./.github/workflows/ecr_reusable_workflow.yml@main
+        uses: geddadalakshman/.github/workflows/ecr_reusable_workflow.yml@main
         with:
             aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
