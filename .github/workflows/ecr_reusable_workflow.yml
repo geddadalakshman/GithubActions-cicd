@@ -2,12 +2,6 @@ name: docker build and push to ECR with reusable workflow
 on: 
     workflow_call:
         inputs:
-            AWS_ACCESS_KEY_ID:
-                required: true
-                type: string
-            AWS_SECRET_ACCESS_KEY:
-                required: true
-                type: string
             aws_region:
                 required: true
                 type: string
