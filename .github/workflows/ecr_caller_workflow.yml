@@ -5,7 +5,7 @@ on:
 
 jobs:
     calling-ecr-reusable-workflow:
-        uses: lakshman/test-repo/.github/workflows/ecr_reusable_workflow.yml@main
+        uses: geddadalakshman/GithubActions-cicd/.github/workflows/ecr_reusable_workflow.yml@main
         secrets: inherit
         with:
             aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
