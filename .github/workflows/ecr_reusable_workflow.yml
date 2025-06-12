@@ -43,10 +43,8 @@ jobs:
 
             - name: Build the docker image
               run: |
-                BUILD=docker build -t ${{ inputs.ecr_repo_name }} -f ${{ inputs.dockerfile_path }} .
-                echo "Running build command: $BUILD"
-                
-
+                docker build -t ${{ inputs.ecr_repo_name }} -f ${{ inputs.dockerfile_path }} .
+                              
             - name: Tag the docker image
               run: |
                 docker tag ${{ inputs.ecr_repo_name }}:latest public.ecr.aws/t0x7f1q9/${{ inputs.ecr_repo_name }}:latest

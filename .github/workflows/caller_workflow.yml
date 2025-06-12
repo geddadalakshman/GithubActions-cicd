@@ -1,6 +1,6 @@
 name: calling reusable workflow to push docker image to ECR
-on:
-  workflow_dispatch:
+on: push
+#   workflow_dispatch:
 
 jobs:
     call-ecr-repo:
