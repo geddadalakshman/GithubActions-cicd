@@ -43,13 +43,13 @@ jobs:
 
             - name: Build the docker image
               run: |
-                docker build -t ${{ inputs.ecr_repo_name }} -f ${{ inputs.dockerfile_path }} .
+                docker build -t ${{ inputs.ecr_repo_name }}:${{ github.run_number }} -f ${{ inputs.dockerfile_path }} .
                               
             - name: Tag the docker image
               run: |
-                docker tag ${{ inputs.ecr_repo_name }}:latest public.ecr.aws/t0x7f1q9/${{ inputs.ecr_repo_name }}:latest
+                docker tag ${{ inputs.ecr_repo_name }}:${{ github.run_number }} public.ecr.aws/t0x7f1q9/${{ inputs.ecr_repo_name }}:${{ github.run_number }}
 
             - name: Push the docker image to ECR
               run: |    
-                docker push public.ecr.aws/t0x7f1q9/${{ inputs.ecr_repo_name }}:latest    
+                docker push public.ecr.aws/t0x7f1q9/${{ inputs.ecr_repo_name }}:${{ github.run_number }}    
 
