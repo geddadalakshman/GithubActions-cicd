@@ -5,4 +5,4 @@ git-push:
 	git add .
 	git commit -m "$(commit_msg)"
 	git push
-	say "Code pushed"
+	osascript -e 'say "Code pushed"'
