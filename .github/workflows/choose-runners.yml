@@ -1,0 +1,20 @@
+name: OS-Specific Runner Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-on-linux:
+    name: Run on Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Linux
+        run: echo "Running on Linux"
+
+  run-on-windows:
+    name: Run on Windows
+    runs-on: windows-latest
+    steps:
+      - name: Echo Windows
+        run: echo "Running on Windows"
+
