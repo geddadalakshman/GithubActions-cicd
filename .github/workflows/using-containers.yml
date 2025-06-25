@@ -1,0 +1,23 @@
+name: Container Job Example
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-in-container:
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:3.11-slim
+      options: --cpus 1
+
+    steps:
+      - name: Install dependencies
+        run: |
+          python --version
+          pip install flask psycopg2
+
+      - name: Run unit tests
+        run: |
+          echo "Running tests inside container"
+          python -c "import flask; print('Flask imported successfully')"
