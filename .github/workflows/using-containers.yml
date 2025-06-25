@@ -11,6 +11,12 @@ jobs:
       image: python:3.11-slim
       options: --cpus 1
 
+    # container:
+    #   image: ghcr.io/owner/image
+    #   credentials:
+    #      username: ${{ github.actor }}
+    #      password: ${{ secrets.github_token }}      
+
     steps:
       - name: Install dependencies
         run: |
