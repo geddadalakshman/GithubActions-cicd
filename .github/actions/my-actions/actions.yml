@@ -1,0 +1,7 @@
+# .github/actions/my-action/action.yml
+name: "My Local Action"
+description: "An example local action"
+runs:
+  using: "composite"
+  steps:
+    - run: echo "✅ This is a local action from the same repo"
