@@ -12,7 +12,7 @@ jobs:
       options: --cpus 1
 
     # container:
-    #   image: ghcr.io/owner/image
+    #   image: nginx/latest
     #   credentials:
     #      username: ${{ github.actor }}
     #      password: ${{ secrets.github_token }}      
