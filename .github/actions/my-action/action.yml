@@ -5,4 +5,4 @@ runs:
   using: "composite"
   steps:
     - run: echo "This is a local action from the same repo"
-      shell: bash
+      #shell: bash
