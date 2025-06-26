@@ -6,7 +6,7 @@ on: workflow_dispatch
 
 jobs:
     first-job:
-        runs-on: demo-runner
+        runs-on: test
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
