@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
     ecr-repo:
-        runs-on: ubuntu-latest
+        runs-on: test
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
