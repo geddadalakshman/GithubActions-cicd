@@ -11,5 +11,5 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
 
-      # - name: Run custom local action
-      #   uses: ./.github/actions/my-action
+      - name: Run custom local action
+        uses: ./.github/actions/my-action
