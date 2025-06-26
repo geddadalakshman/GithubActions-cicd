@@ -6,7 +6,7 @@ on: workflow_dispatch
 
 jobs:
     first-job:
-        runs-on: self-hosted
+        runs-on: demo-runner
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
