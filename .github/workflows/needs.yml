@@ -19,7 +19,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Deploying build ${{ needs.build.outputs.build_id1 }}"
+      - run: echo "Deploying build ${{ needs.buildid.outputs.build_id1 }}"
   debug:
     needs: [build, deploy]
     runs-on: ubuntu-latest
