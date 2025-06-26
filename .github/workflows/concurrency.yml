@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: concurrency- Build & Deploy
 
 on: [push]
 
