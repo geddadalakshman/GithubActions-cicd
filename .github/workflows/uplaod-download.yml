@@ -22,6 +22,7 @@ jobs:
         with:
           name: my-artifact
           path: output/
+          retention-days: 5
 
   download:
     runs-on: ubuntu-latest
