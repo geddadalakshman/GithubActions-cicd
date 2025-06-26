@@ -1,0 +1,37 @@
+name: Artifact Sharing - Same Workflow
+
+on: [workflow_dispatch]
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-name: ${{ steps.set-output.outputs.artifact-name }}
+    steps:
+      - name: Create file to upload
+        run: |
+          mkdir -p output
+          echo "This is a test artifact file." > output/test.txt
+
+      - name: Set artifact name
+        id: set-output
+        run: echo "artifact-name=my-artifact" >> $GITHUB_OUTPUT
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: output/
+
+  download:
+    runs-on: ubuntu-latest
+    needs: upload
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: my-artifact
+          path: retrieved/
+
+      - name: Print artifact content
+        run: cat retrieved/test.txt
