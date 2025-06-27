@@ -1,0 +1,31 @@
+name: Deploy Lambda to AWS
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: test # your self-hosted runner
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Zip Lambda Folder
+        run: |
+          ls -la
+          cd lambda
+          zip -r ../deploymentFile.zip .
+          
+      - name: List contents of ZIP (for verification)
+        run: |
+          unzip -l deploymentFile.zip          
+
+      - name: Deploy to AWS Lambda
+        env:
+          AWS_REGION: us-east-1
+          FUNCTION_NAME: my-demo
+        run: |
+          aws lambda update-function-code \
+            --function-name "$FUNCTION_NAME" \
+            --region "$AWS_REGION" \
+            --zip-file fileb://deploymentFile.zip
