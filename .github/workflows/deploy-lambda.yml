@@ -13,9 +13,8 @@ jobs:
       - name: Zip Lambda Folder
         run: |
           ls -lah
-          zip -r deploymentFile.zip lambda/*
-        #   cd lambda
-        #   zip -r ../deploymentFile.zip .  
+          cd lambda
+          zip -r ../deploymentFile.zip .  
 
       - name: List contents of ZIP (for verification)
         run: |
