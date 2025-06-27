@@ -15,10 +15,13 @@ jobs:
           ls -lah
           cd lambda
           zip -r ../deploymentFile.zip .  
+          pwd
 
       - name: List contents of ZIP (for verification)
         run: |
-          unzip -l deploymentFile.zip          
+          pwd
+          unzip -l deploymentFile.zip   
+                 
 
       - name: Deploy to AWS Lambda
         env:
