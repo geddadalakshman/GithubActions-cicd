@@ -1,0 +1,53 @@
+name: pushing images to ecr repository in AWS
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  ecr-repo:
+    runs-on: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: List files in the repository
+        run: |
+          echo "Files in the repository root:"
+          ls -la
+          echo "Files in Docker context directory:"
+          ls -la .github/workflows/torch/hack/docker
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/t0x7f1q9
+
+      - name: Build both Docker images
+        run: |
+          docker build -t lakshman/test-repo-sagemaker \
+            -f .github/workflows/torch/hack/docker/Dockerfile.sagemaker \
+            .github/workflows/torch/hack/docker
+          
+          docker build -t lakshman/test-repo-sagemaker-tf \
+            -f .github/workflows/torch/hack/docker/Dockerfile.sagemaker-tf \
+            .github/workflows/torch/hack/docker
+
+      - name: Tag both Docker images
+        run: |
+          docker tag lakshman/test-repo-sagemaker:latest \
+            public.ecr.aws/t0x7f1q9/lakshman/test-repo-sagemaker:latest
+
+          docker tag lakshman/test-repo-sagemaker-tf:latest \
+            public.ecr.aws/t0x7f1q9/lakshman/test-repo-sagemaker-tf:latest
+
+      - name: Push both Docker images to ECR
+        run: |
+          docker push public.ecr.aws/t0x7f1q9/lakshman/test-repo-sagemaker:latest
+          docker push public.ecr.aws/t0x7f1q9/lakshman/test-repo-sagemaker-tf:latest
