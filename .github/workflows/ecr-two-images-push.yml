@@ -1,4 +1,4 @@
-name: pushing images to ecr repository in AWS
+name: pushing  two images to ecr repository in AWS
 
 on: 
   workflow_dispatch:
@@ -31,23 +31,23 @@ jobs:
 
       - name: Build both Docker images
         run: |
-          docker build -t lakshman/test-repo-sagemaker \
+          docker build -t lakshman/test-repo \
             -f .github/workflows/torch/hack/docker/Dockerfile.sagemaker \
             .github/workflows/torch/hack/docker
           
-          docker build -t lakshman/test-repo-sagemaker-tf \
+          docker build -t lakshman/test-repo \
             -f .github/workflows/torch/hack/docker/Dockerfile.sagemaker-tf \
             .github/workflows/torch/hack/docker
 
       - name: Tag both Docker images
         run: |
-          docker tag lakshman/test-repo-sagemaker:latest \
-            public.ecr.aws/t0x7f1q9/lakshman/test-repo-sagemaker:latest
+          docker tag lakshman/test-repo:latest \
+            public.ecr.aws/t0x7f1q9/lakshman/test-repo:latest
 
-          docker tag lakshman/test-repo-sagemaker-tf:latest \
-            public.ecr.aws/t0x7f1q9/lakshman/test-repo-sagemaker-tf:latest
+          docker tag lakshman/test-repo:latest \
+            public.ecr.aws/t0x7f1q9/lakshman/test-repo:latest
 
       - name: Push both Docker images to ECR
         run: |
-          docker push public.ecr.aws/t0x7f1q9/lakshman/test-repo-sagemaker:latest
-          docker push public.ecr.aws/t0x7f1q9/lakshman/test-repo-sagemaker-tf:latest
+          docker push public.ecr.aws/t0x7f1q9/lakshman/test-repo:latest
+          docker push public.ecr.aws/t0x7f1q9/lakshman/test-repo:latest
