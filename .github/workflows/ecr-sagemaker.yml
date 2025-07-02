@@ -16,7 +16,7 @@ jobs:
           echo "Files in the repository:"
           ls -la
           echo "Files in Docker context directory:"
-          ls -la workflows/torch/hack/docker
+          ls -la torch/hack/docker
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -31,7 +31,7 @@ jobs:
 
       - name: Build the Docker image
         run: |
-          docker build -t lakshman/test-repo -f workflows/torch/hack/docker/Dockerfile.sagemaker workflows/torch/hack/docker
+          docker build -t lakshman/test-repo -f torch/hack/docker/Dockerfile.sagemaker torch/hack/docker
 
       - name: Tag the Docker image
         run: |
