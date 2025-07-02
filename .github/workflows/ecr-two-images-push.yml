@@ -44,10 +44,10 @@ jobs:
           docker tag lakshman/test-repo:latest \
             public.ecr.aws/t0x7f1q9/lakshman/test-repo:latest
 
-          docker tag lakshman/test-repo:latest \
-            public.ecr.aws/t0x7f1q9/lakshman/test-repo:latest
+          docker tag lakshman/test-repo:1.0 \
+            public.ecr.aws/t0x7f1q9/lakshman/test-repo:1.0
 
       - name: Push both Docker images to ECR
         run: |
           docker push public.ecr.aws/t0x7f1q9/lakshman/test-repo:latest
-          docker push public.ecr.aws/t0x7f1q9/lakshman/test-repo:latest
+          docker push public.ecr.aws/t0x7f1q9/lakshman/test-repo:1.0
