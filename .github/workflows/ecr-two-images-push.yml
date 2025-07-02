@@ -11,12 +11,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: List files in the repository
+      - name: List Dockerfiles
         run: |
-          echo "Files in the repository root:"
-          ls -la
-          echo "Files in Docker context directory:"
-          ls -la .github/workflows/torch/hack/docker
+          echo "Available Dockerfiles:"
+          ls -l .github/workflows/torch/hack/docker/Dockerfile.*
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -29,25 +27,24 @@ jobs:
         run: |
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/t0x7f1q9
 
-      - name: Build both Docker images
+      - name: Build, tag, and push Docker images dynamically
         run: |
-          docker build -t lakshman/test-repo:sagemaker \
-            -f .github/workflows/torch/hack/docker/Dockerfile.sagemaker \
-            .github/workflows/torch/hack/docker
-          
-          docker build -t lakshman/test-repo:sagemaker-tf \
-            -f .github/workflows/torch/hack/docker/Dockerfile.sagemaker-tf \
-            .github/workflows/torch/hack/docker
+          for file in .github/workflows/torch/hack/docker/Dockerfile.*; do
+            echo "Processing Dockerfile: $file"
 
-      - name: Tag both Docker images
-        run: |
-          docker tag lakshman/test-repo:sagemaker \
-            public.ecr.aws/t0x7f1q9/lakshman/test-repo:sagemaker
+            # Extract tag from filename (e.g., Dockerfile.sagemaker → sagemaker)
+            TAG=$(basename "$file" | cut -d'.' -f2-)
 
-          docker tag lakshman/test-repo:sagemaker-tf \
-            public.ecr.aws/t0x7f1q9/lakshman/test-repo:sagemaker-tf
+            # Define image name
+            IMAGE_NAME=lakshman/test-repo:$TAG
+            ECR_IMAGE=public.ecr.aws/t0x7f1q9/$IMAGE_NAME
 
-      - name: Push both Docker images to ECR
-        run: |
-          docker push public.ecr.aws/t0x7f1q9/lakshman/test-repo:sagemaker
-          docker push public.ecr.aws/t0x7f1q9/lakshman/test-repo:sagemaker-tf
+            echo "Building image: $IMAGE_NAME"
+            docker build -t $IMAGE_NAME -f "$file" .github/workflows/torch/hack/docker
+
+            echo "Tagging image as: $ECR_IMAGE"
+            docker tag $IMAGE_NAME $ECR_IMAGE
+
+            echo "Pushing image: $ECR_IMAGE"
+            docker push $ECR_IMAGE
+          done
