@@ -1,4 +1,4 @@
-name: pushing images to ecr repository in AWS
+name: pushing two images to ecr repository in AWS
 
 on: 
   workflow_dispatch:
