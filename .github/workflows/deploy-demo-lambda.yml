@@ -1,0 +1,93 @@
+name: Deploy demo Lambda
+
+on:
+  push:
+    branches:
+      - dev
+      - stg
+      - main
+    paths:
+      - 'lambda/demo-lambda/**'
+
+jobs:
+  deploy-demo:
+    runs-on: gev-linux-medium
+
+    # Dynamically select GitHub Environment based on branch
+    environment: ${{ 
+      github.ref_name == 'dev' && 'dev' || github.ref_name == 'stg' && 'stg' || github.ref_name == 'main' && 'prd' }}
+
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Zip Lambda code
+          run: |
+            cd lambda/demo-lambda
+            zip -r ../../demo-lambda.zip .
+            cd ../..
+            ls -lrt
+
+        - name: Set External ID based on branch
+          run: |
+            if [[ "${GITHUB_REF_NAME}" == "dev" || "${GITHUB_REF_NAME}" == "stg" ]]; then
+                echo "EXTERNAL_ID=903072064" >> $GITHUB_ENV
+                echo "AWS_DESTINATION_ACCOUNT=${{ vars.AWS_DESTINATION_ACCOUNT }}" >> $GITHUB_ENV
+                echo "AWS_DESTINATION_ROLE=${{ vars.AWS_DESTINATION_ROLE }}" >> $GITHUB_ENV
+            elif [[ "${GITHUB_REF_NAME}" == "main" ]]; then
+                echo "EXTERNAL_ID=123456789" >> $GITHUB_ENV
+                echo "AWS_DESTINATION_ACCOUNT=${{ vars.AWS_DESTINATION_ACCOUNT }}" >> $GITHUB_ENV
+                echo "AWS_DESTINATION_ROLE=${{ vars.AWS_DESTINATION_ROLE }}" >> $GITHUB_ENV
+            else
+                echo "Unsupported branch: ${GITHUB_REF_NAME}"
+                exit 1
+            fi            
+
+        - name: Configure AWS Credentials (assume role)
+        # env:
+        #   AWS_DESTINATION_ACCOUNT: ${{ vars.AWS_DESTINATION_ACCOUNT }}
+        #   AWS_DESTINATION_ROLE: 'role/app-903072064/app-903072064-avc-dev-gha-role' 
+          run: |
+            echo "Assuming role in account: ${{ vars.AWS_DESTINATION_ACCOUNT }} with external-id $EXTERNAL_ID"
+
+            CREDS=$( aws sts assume-role \
+                --role-arn "arn:aws:iam::${{ vars.AWS_DESTINATION_ACCOUNT }}:${{ vars.AWS_DESTINATION_ROLE }}" \
+                --role-session-name "ghrunner" \
+                --external-id "$EXTERNAL_ID" )
+
+            export AWS_ACCESS_KEY_ID=$( echo "$CREDS" | jq -r .Credentials.AccessKeyId )
+            export AWS_SECRET_ACCESS_KEY=$( echo "$CREDS" | jq -r .Credentials.SecretAccessKey )
+            export AWS_SESSION_TOKEN=$( echo "$CREDS" | jq -r .Credentials.SessionToken )
+
+            echo "Updating env vars for ${{ vars.FUNCTION_NAME_2 }}"
+
+            VARS=$(env | grep -E "^(ENV($|_)|LAMBDA_|ECR_)" || true)
+
+            if [ -z "$VARS" ]; then
+                echo "No matching environment variables found."
+                ENV_VARS=""
+            else
+                ENV_VARS=""
+                for kv in $VARS; do
+                KEY=$(echo $kv | cut -d= -f1)
+                VAL=$(echo $kv | cut -d= -f2-)
+                ENV_VARS="$ENV_VARS$KEY=$VAL,"
+                done
+                ENV_VARS="${ENV_VARS%,}"
+            fi
+
+            echo "Final environment Variables: {$ENV_VARS}"
+
+            aws lambda update-function-configuration \
+                --function-name ${{ vars.FUNCTION_NAME_2 }} \
+                --region $AWS_REGION \
+                --environment "Variables={${ENV_VARS}}"
+
+                sleep 10
+
+            echo "Updating Lambda function: ${{ vars.FUNCTION_NAME_2 }}"
+            aws sts get-caller-identity
+            aws lambda update-function-code \
+                --function-name ${{ vars.FUNCTION_NAME_2 }} \
+                --region $AWS_REGION \
+                --zip-file fileb://${{ vars.FUNCTION_NAME_2 }}.Zip
