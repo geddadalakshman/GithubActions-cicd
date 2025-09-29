@@ -1,0 +1,145 @@
+name: Deploy Lambda
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+      - stg
+      - main
+    paths:
+      - 'lambda/test-lambda/**'
+      - 'lambda/demo-lambda/**'
+
+jobs:
+  detect-changes:
+    runs-on:
+      group: test-group
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed lambda folders
+        id: set-matrix
+        run: |
+          echo "Detecting Lambda folder changes for branch: $GITHUB_REF_NAME"
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} || true)
+
+          echo "Changed files:"
+          echo "$CHANGED"
+
+          MATRIX="[]"
+          if echo "$CHANGED" | grep -qE '^lambda/test-lambda/'; then
+            MATRIX=$(jq -c'. + [{"function": "'${{ vars.FUNCTION_NAME_1 }}'", "path": "lambda/test-lambda"}]' <<<"$MATRIX")
+          fi
+
+          if echo "$CHANGED" | grep -qE '^lambda/demo-lambda/'; then
+            MATRIX=$(jq -c'. + [{"function": "'${{ vars.FUNCTION_NAME_2 }}'", "path": "lambda/demo-lambda"}]' <<<"$MATRIX")
+          fi
+          echo "Final matrix: $MATRIX"
+          echo "matrix=$MATRIX" >>$GITHUB_OUTPUT
+
+  deploy-lambda:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.matrix != '[]' 
+    runs-on:
+      group: test-group
+    environment: ${{ github.ref_name == 'dev' && 'dev' || github.ref_name == 'stg' && 'stg' || github.ref_name == 'main' && 'prd' }}
+    strategy:
+      matrix:
+        include: ${{ fromJson(needs.detect-changes.outputs.matrix) }}
+          # - function: ${{ vars.FUNCTION_NAME_1 }}
+          #   path: lambda/test-lambda
+          # - function: ${{ vars.FUNCTION_NAME_2 }}
+          #   path: lambda/demo-lambda
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Load all github environment variables into shell env
+        run: |
+          for key in $(jq -r 'keys[]' <<<"${{ toJson(vars) }}"); do
+            val=$(jq -r --arg k "$key" '.[$k]' <<<"${{ toJson(vars) }}")
+            echo "$key=$val" >> $GITHUB_ENV
+          done
+          
+          echo "All environment variables"
+          cat $GITHUB_ENV          
+
+      - name: Zip Lambda code
+        run: |
+          echo "Function name: ${{ matrix.function }}"
+          echo "Path: ${{ matrix.path }}"
+          cd ${{ matrix.path }}
+          zip -r ../../${{ matrix.function }}.zip .
+          cd ../..
+          ls -lrt
+
+      - name: Set External ID based on branch
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "dev" || "${GITHUB_REF_NAME}" == "stg" ]]; then
+            echo "EXTERNAL_ID=903072064" >> $GITHUB_ENV
+            echo "AWS_DESTINATION_ACCOUNT=${{ vars.AWS_DESTINATION_ACCOUNT }}" >> $GITHUB_ENV
+            echo "AWS_DESTINATION_ROLE=${{ vars.AWS_DESTINATION_ROLE }}" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF_NAME}" == "main" ]]; then
+            echo "EXTERNAL_ID=123456789" >> $GITHUB_ENV
+            echo "AWS_DESTINATION_ACCOUNT=${{ vars.AWS_DESTINATION_ACCOUNT }}" >> $GITHUB_ENV
+            echo "AWS_DESTINATION_ROLE=${{ vars.AWS_DESTINATION_ROLE }}" >> $GITHUB_ENV
+          else
+            echo "Unsupported branch: ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+
+      - name: Configure AWS Credentials (assume role)
+        # env:
+        #   AWS_DESTINATION_ACCOUNT: ${{ vars.AWS_DESTINATION_ACCOUNT }}
+        #   AWS_DESTINATION_ROLE: 'role/app-903072064/app-903072064-avc-dev-gha-role' 
+        run: |
+          echo "Assuming role in account: $AWS_DESTINATION_ACCOUNT with external-id $EXTERNAL_ID"
+
+          CREDS=$( aws sts assume-role \
+            --role-arn "arn:aws:iam::${AWS_DESTINATION_ACCOUNT}:${AWS_DESTINATION_ROLE}" \
+            --role-session-name "ghrunner" \
+            --external-id "$EXTERNAL_ID" )
+
+          export AWS_ACCESS_KEY_ID=$( echo "$CREDS" | jq -r .Credentials.AccessKeyId )
+          export AWS_SECRET_ACCESS_KEY=$( echo "$CREDS" | jq -r .Credentials.SecretAccessKey )
+          export AWS_SESSION_TOKEN=$( echo "$CREDS" | jq -r .Credentials.SessionToken )
+
+          echo "Updating env vars for ${{ matrix.function }}"
+
+          VARS=$(env | grep -E "^(ENV($|_)|LAMBDA_|ECR_)" || true)
+
+          if [ -z "$VARS" ]; then
+            echo "⚠️ No matching environment variables found."
+            ENV_VARS=""
+          else
+            ENV_VARS=""
+            for kv in $VARS; do
+              KEY=$(echo $kv | cut -d= -f1)
+              VAL=$(echo $kv | cut -d= -f2-)
+              ENV_VARS="$ENV_VARS$KEY=$VAL,"
+            done
+            ENV_VARS="${ENV_VARS%,}"
+          fi
+
+          echo "Final environment Variables: {$ENV_VARS}"
+
+          aws lambda update-function-configuration \
+            --function-name ${{ matrix.function }} \
+            --region $AWS_REGION \
+            --environment "Variables={${ENV_VARS}}"
+
+            sleep 10
+
+          echo "Updating Lambda function: ${{ matrix.function }}"
+          aws sts get-caller-identity
+          aws lambda update-function-code \
+            --function-name ${{ matrix.function }} \
+            --region $AWS_REGION \
+            --zip-file fileb://${{ matrix.function }}.zip
