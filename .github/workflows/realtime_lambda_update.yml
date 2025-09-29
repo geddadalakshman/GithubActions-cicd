@@ -142,4 +142,4 @@ jobs:
           aws lambda update-function-code \
             --function-name ${{ matrix.function }} \
             --region $AWS_REGION \
-            --zip-file fileb://${{ matrix.function }}.zip
+            --zip-file fileb://${{ matrix.function }}.Zip
