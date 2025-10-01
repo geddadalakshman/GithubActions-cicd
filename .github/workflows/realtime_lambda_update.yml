@@ -34,11 +34,11 @@ jobs:
 
           MATRIX="[]"
           if echo "$CHANGED" | grep -qE '^lambda/test-lambda/'; then
-            MATRIX=$(jq -c'. + [{"function": "'${{ vars.FUNCTION_NAME_1 }}'", "path": "lambda/test-lambda"}]' <<<"$MATRIX")
+            MATRIX=$(jq -c'. + [{"function": "'${{ vars.FUNCTION_NAME_1 }}'", "path": "lambda/test-lambda","environment": "test-lambda-'${GITHUB_REF_NAME}'"}]' <<<"$MATRIX")
           fi
 
           if echo "$CHANGED" | grep -qE '^lambda/demo-lambda/'; then
-            MATRIX=$(jq -c'. + [{"function": "'${{ vars.FUNCTION_NAME_2 }}'", "path": "lambda/demo-lambda"}]' <<<"$MATRIX")
+            MATRIX=$(jq -c'. + [{"function": "'${{ vars.FUNCTION_NAME_2 }}'", "path": "lambda/demo-lambda","environment": "demo-lambda-'${GITHUB_REF_NAME}'"}]' <<<"$MATRIX")
           fi
           echo "Final matrix: $MATRIX"
           echo "matrix=$MATRIX" >>$GITHUB_OUTPUT
@@ -48,7 +48,8 @@ jobs:
     if: needs.detect-changes.outputs.matrix != '[]' 
     runs-on:
       group: test-group
-    environment: ${{ github.ref_name == 'dev' && 'dev' || github.ref_name == 'stg' && 'stg' || github.ref_name == 'main' && 'prd' }}
+    # environment: ${{ github.ref_name == 'dev' && 'dev' || github.ref_name == 'stg' && 'stg' || github.ref_name == 'main' && 'prd' }}
+    environment: ${{ matrix.environment }}
     strategy:
       matrix:
         include: ${{ fromJson(needs.detect-changes.outputs.matrix) }}
