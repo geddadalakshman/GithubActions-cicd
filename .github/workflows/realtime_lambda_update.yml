@@ -1,4 +1,4 @@
-name: Deploy Lambda
+name: Real time usecase to deploy lambda functions
 
 on:
   workflow_dispatch:
