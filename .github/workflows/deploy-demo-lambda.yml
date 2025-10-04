@@ -1,13 +1,14 @@
 name: Deploy demo Lambda
 
 on:
-  push:
-    branches:
-      - dev
-      - stg
-      - main
-    paths:
-      - 'lambda/demo-lambda/**'
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - dev
+  #     - stg
+  #     - main
+  #   paths:
+  #     - 'lambda/demo-lambda/**'
 
 jobs:
   deploy-demo:
