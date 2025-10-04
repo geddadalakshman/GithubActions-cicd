@@ -2,14 +2,14 @@ name: Real time usecase to deploy lambda functions
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - dev
-  #     - stg
-  #     - main
-  #   paths:
-  #     - 'lambda/test-lambda/**'
-  #     - 'lambda/demo-lambda/**'
+  push:
+    branches:
+      - dev
+      - stg
+      - main
+    paths:
+      - 'lambda/test-lambda/**'
+      - 'lambda/demo-lambda/**'
 
 jobs:
   detect-changes:
