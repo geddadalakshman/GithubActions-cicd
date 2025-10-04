@@ -13,7 +13,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Echo Linux
-        run: echo "Running on Linux"
+        run: echo "Running on Linux1"
 
   run-on-windows:
     name: Run on Windows
