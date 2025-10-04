@@ -33,7 +33,7 @@ jobs:
 
           MATRIX="[]"
           if echo "$CHANGED" | grep -qE '^lambda/test-lambda/'; then
-            MATRIX=$(jq -c '. + [{"function": "'${{ vars.FUNCTION_NAME_1 }}'", "path": "lambda/test-lambda","environment": "test-lambda-'${GITHUB_REF_NAME}'"}]' <<<"$MATRIX")
+            MATRIX=$(jq -c '. + [{"environment": "test-lambda-'${GITHUB_REF_NAME}'", "function": "'${{ vars.FUNCTION_NAME_1 }}'", "path": "lambda/test-lambda"}]' <<<"$MATRIX")
           fi
 
           if echo "$CHANGED" | grep -qE '^lambda/demo-lambda/'; then
