@@ -3,5 +3,5 @@ def lambda_handler(event, context):
     print("Hello World")
     return {
         'statusCode': 200,
-        'body': 'Hello from Lambda test-2'
+        'body': 'Hello from Lambda test-1'
     }
