@@ -1,11 +1,11 @@
 name: OS-Specific Runner Demo
 
 on:
-  # workflow_dispatch:
-  push:
-    branches:
-      - main
-      - dev
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  #     - dev
 
 jobs:
   run-on-linux:
