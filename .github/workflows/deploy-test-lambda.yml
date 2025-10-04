@@ -1,13 +1,14 @@
 name: Deploy Test Lambda
 
 on:
-  push:
-    branches:
-      - dev
-      - stg
-      - main
-    paths:
-      - 'lambda/test-lambda/**'
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - dev
+  #     - stg
+  #     - main
+    # paths:
+    #   - 'lambda/test-lambda/**'
 
 jobs:
   deploy-test:
