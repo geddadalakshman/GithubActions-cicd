@@ -1,12 +1,16 @@
 name: OS-Specific Runner Demo
 
 on:
-  workflow_dispatch:
+  # workflow_dispatch:
+  push:
+    branches:
+      - main
+      - dev
 
 jobs:
   run-on-linux:
     name: Run on Ubuntu
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Echo Linux
         run: echo "Running on Linux"
