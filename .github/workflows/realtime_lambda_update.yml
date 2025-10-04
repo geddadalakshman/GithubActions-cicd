@@ -13,7 +13,7 @@ on:
 
 jobs:
   detect-changes:
-    runs-on: demo
+    runs-on: self-hosted
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -45,7 +45,7 @@ jobs:
   deploy-lambda:
     needs: detect-changes
     if: needs.detect-changes.outputs.matrix != '[]' 
-    runs-on: demo
+    runs-on: self-hosted
     # environment: ${{ github.ref_name == 'dev' && 'dev' || github.ref_name == 'stg' && 'stg' || github.ref_name == 'main' && 'prd' }}
     environment: ${{ matrix.environment }}
     strategy:
