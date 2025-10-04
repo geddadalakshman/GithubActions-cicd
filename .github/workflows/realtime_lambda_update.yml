@@ -62,8 +62,8 @@ jobs:
 
       - name: Load all github environment variables into shell env
         run: |
-          for key in $(jq -r 'keys[]' <<<"${{ toJson(vars) }}"); do
-            val=$(jq -r --arg k "$key" '.[$k]' <<<"${{ toJson(vars) }}")
+          for key in $(jq -r 'keys[]' <<<'${{ toJson(vars) }}'); do
+            val=$(jq -r --arg k "$key" '.[$k]' <<<'${{ toJson(vars) }}')
             echo "$key=$val" >> $GITHUB_ENV
           done
           
