@@ -13,8 +13,7 @@ on:
 
 jobs:
   detect-changes:
-    runs-on:
-      group: test-group
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -46,8 +45,7 @@ jobs:
   deploy-lambda:
     needs: detect-changes
     if: needs.detect-changes.outputs.matrix != '[]' 
-    runs-on:
-      group: test-group
+    runs-on: ubuntu-latest
     # environment: ${{ github.ref_name == 'dev' && 'dev' || github.ref_name == 'stg' && 'stg' || github.ref_name == 'main' && 'prd' }}
     environment: ${{ matrix.environment }}
     strategy:
